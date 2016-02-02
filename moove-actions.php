@@ -79,17 +79,31 @@ class Moove_Importer_Actions {
 	public function moove_register_ajax_actions() {
 		add_action( 'wp_ajax_moove_read_xml', array( &$this, 'moove_read_xml' ) );
 		add_action( 'wp_ajax_nopriv_moove_read_xml', array( &$this, 'moove_read_xml' ) );
+
+		add_action( 'wp_ajax_moove_create_post', array( &$this, 'moove_create_post' ) );
+		add_action( 'wp_ajax_nopriv_moove_create_post', array( &$this, 'moove_create_post' ) );
 	}
 
 	public function moove_read_xml() {
 		$args = array(
 			'data' 		=> $_POST['data'],
 			'xmlaction'	=> sanitize_text_field(esc_sql($_POST['xmlaction'])),
-			'type'		=> sanitize_text_field(esc_sql($_POST['type']))
+			'type'		=> sanitize_text_field(esc_sql($_POST['type'])),
+			'node'		=> sanitize_text_field(esc_sql($_POST['node']))
 		);
 		$move_importer = new Moove_Importer_Controller;
 		$read_xml = $move_importer->moove_read_xml( $args );
 		echo $read_xml;
+		die();
+	}
+
+	public function moove_create_post() {
+		$args = array(
+			'post_data' 		=> sanitize_text_field(esc_sql($_POST['post_data'])),
+		);
+		$move_create_post = new Moove_Importer_Controller;
+		$create_post = $move_create_post->moove_create_post( $args );
+		echo $create_post;
 		die();
 	}
 }

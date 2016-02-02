@@ -15,25 +15,45 @@
 
     <?php if ( count( $data ) ) : ?>
         <div class="moove-feed-importer-taxonomies moove-hidden">
+            <div class="moove-post-fields">
+                <h4>Post status</h4>
+                <select name="moove-importer-post-type-status" id="moove-importer-post-type-status" >
+                    <option value="publish">Published</option>
+                    <option value="pending">Pending review</option>
+                    <option value="draft">Draft</option>
+                </select>
+                <h4>Post title</h4>
+                <select name="moove-importer-post-type-posttitle" id="moove-importer-post-type-posttitle" class="moove-importer-dynamic-select">
+
+                </select>
+                <h4>Featured image url</h4>
+                <select name="moove-importer-post-type-ftrimage" id="moove-importer-post-type-ftrimage" class="moove-importer-dynamic-select">
+
+                </select>
+            </div>
+            <!-- "moove-post-fields -->
         <br />
         <hr>
         <?php foreach ($data as $post_types) :
-            if ( count( $post_types['taxonomies'] ) ) : ?>
+            if ( count( $post_types['taxonomies'] ) ) :
+                $i = 0; ?>
                 <div class="moove_cpt_tax_<?php echo $post_types['post_type']; ?> moove_cpt_tax moove-hidden">
                     <h4>Taxonomies</h4>
-                    <?php foreach ($post_types['taxonomies'] as $taxonomy) : ?>
+                    <?php foreach ($post_types['taxonomies'] as $taxonomy) :
+                        $i++;
+                        ?>
                         <div class="moove-importer-taxonomy-box">
                             <p class="moove-importer-tax-title"><?php echo $taxonomy->labels->name; ?></p>
                             <hr>
                             <p> Title: </p>
-                            <select name="moove-importer-post-type-select" id="moove-importer-post-type-select" class="moove-importer-log-settings">
+                            <select name="moove-importer-post-type-title<?php echo $i; ?>" id="moove-importer-post-type-title-<?php echo $i; ?>" class="moove-importer-log-settings moove-importer-dynamic-select">
                                 <?php foreach ($data as $post_types) : ?>
 
                                     <option value="<?php echo $post_types['post_type']; ?>"> <?php echo ucfirst( $post_types['post_type'] ); ?> </option>
                                 <?php endforeach; ?>
                             </select>
                             <p> Slug: </p>
-                             <select name="moove-importer-post-type-select" id="moove-importer-post-type-select" class="moove-importer-log-settings">
+                             <select name="moove-importer-post-type-title<?php echo $i; ?>" id="moove-importer-post-type-slug-<?php echo $i; ?>" class="moove-importer-log-settings moove-importer-dynamic-select">
                                 <?php foreach ($data as $post_types) : ?>
                                     <option value="<?php echo $post_types['post_type']; ?>"> <?php echo ucfirst( $post_types['post_type'] ); ?> </option>
                                 <?php endforeach; ?>
@@ -46,9 +66,16 @@
                 <!-- moove_cpt_tax -->
             <?php endif;
         endforeach; ?>
+
         </div>
         <!-- moove-feed-importer-taxonomies -->
+
     <?php endif;?>
+    <div class="moove-submit-btn-cnt moove-hidden">
+        <br />
+        <a href="#" class="button button-primary moove-start-import-feed">IMPORT</a>
+    </div>
+    <!-- moove-submit-btn-cnt -->
 </div>
 <!-- moove-feed-importer-where -->
 
@@ -79,9 +106,7 @@
             <div class="file-upload moove-importer-src-upload moove-to-hide moove-hidden ">
                 <?php _e('Select XML file','moove'); ?>:
                 <br />
-                <form id="moove_file_importer_form">
-                    <input type="file" name="moove_importer_file" id="moove_importer_file"><br />
-                </form>
+                <input type="file" name="moove_importer_file" id="moove_importer_file"><br /><br />
             </div>
             <!-- file-upload moove-importer-src-upload -->
             <button class="button button-primary moove-importer-read-file">Check DATA</button>
@@ -90,8 +115,11 @@
             </div>
             <!-- moove-feed-xml-error -->
         </form>
-        <div class="moove-feed-xml-node-select">
+        <div class="moove-feed-xml-node-select moove-hidden">
+            <div class="node-select-cnt">
 
+            </div>
+            <button class="button button-primary moove-importer-create-preview">Create Preview</button>
         </div>
         <!-- moove-feed-xml-node-select -->
 
