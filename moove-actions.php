@@ -87,7 +87,9 @@ class Moove_Importer_Actions {
 			'xmlaction'	=> sanitize_text_field(esc_sql($_POST['xmlaction'])),
 			'type'		=> sanitize_text_field(esc_sql($_POST['type']))
 		);
-		echo Moove_Importer_Controller::moove_read_xml( $args );
+		$move_importer = new Moove_Importer_Controller;
+		$read_xml = $move_importer->moove_read_xml( $args );
+		echo $read_xml;
 		die();
 	}
 }

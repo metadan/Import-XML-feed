@@ -12,7 +12,33 @@
 .moove-hidden {
     display: none;
 }
-.moove-form-container input[type='text'],
-.moove-form-container select {
+.moove-importer-plugin-wrap input[type='text'],
+.moove-importer-plugin-wrap select {
     width: 100%;
+}
+.moove-importer-taxonomy-box {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #eaeaea;
+}
+.moove-importer-tax-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+.moove-feed-importer-from {
+    position: relative;
+}
+.moove-feed-importer-from .select_another_source {
+    padding: 5px 10px;
+    height: auto;
+    line-height: 15px;
+    border: 1px solid #23282d;
+    box-shadow: none;
+    background-color: transparent;
+    border-radius: 0;
+    position: absolute;
+    top:20px;
+    right: 15px;
+    font-size: 10px;
+    text-transform: uppercase;
 }
