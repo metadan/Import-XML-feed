@@ -24,45 +24,27 @@ class Moove_Importer_Controller {
         $this->xmlreturn = array();
         $this->xmlnodes = array();
 	}
-    private function moove_recurse_xml_nodes( $xml ) {
-       $child_count = 0;
-
-       foreach($xml as $child) {
-            $child_count++;
-            // no childern, aka "leaf node"
-            if( Moove_Importer_Controller::moove_recurse_xml_nodes( $child ) == 0 ) {
-                //$this->xmlnodes[$child->getName()] = $this->xmlnodes[$child->getName()] + 1;
-            }
-       }
-       return $child_count;
-    }
-
 
     private function moove_recurse_xml( $xml , $parent = "" ) {
-       $child_count = 0;
-       foreach($xml as $key => $value) {
+        $child_count = 0;
+        foreach($xml as $key => $value) {
             $child_count++;
-
-
-            $count = $this->xmlnodes[$value->getName()]['count'] + 1;
-            $this->xmlnodes[$value->getName()] = array(
-                'count' =>  $count,
-                'name'  =>  $value->getName(),
-                'key'   =>  $parent . "/" . (string)$key
-            );
+            if ( count($value) ) :
+                $count = $this->xmlnodes[$value->getName()]['count'] + 1;
+                $this->xmlnodes[$value->getName()] = array(
+                    'count' =>  $count,
+                    'name'  =>  $value->getName(),
+                    'key'   =>  $parent . "/" . (string)$key
+                );
+            endif;
             // no childern, aka "leaf node"
             if( Moove_Importer_Controller::moove_recurse_xml( $value , $parent . "/" . $key ) == 0 ) {
                 $this->xmlreturn[] = array(
                     'key'   =>  $parent . "/" . (string)$key,
                     'value' =>  (string)$value
                 );
-                $this->xmlnodes[$value->getName()] = array(
-                    'count' =>  $count,
-                    'name'  =>  $value->getName(),
-                    'key'   =>  $parent . "/" . (string)$key
-                );
             }
-       }
+        }
        return $child_count;
     }
 
@@ -77,13 +59,39 @@ class Moove_Importer_Controller {
         endif;
 
         if ( $args['xmlaction'] === 'check' ) :
-
-            return ( $xml ) ? "true" : "false";
+            if ( $xml ) :
+                $parent = $parent . "/" . $xml->getName();
+                Moove_Importer_Controller::moove_recurse_xml( $xml, $parent );
+                // $this->xmlnodes = array_unique( $this->xmlnodes );
+                ob_start(); ?>
+                <h4>Select your repeated XML element you want to import</h4>
+                <select name="moove-xml-nodes" id="moove-xml-nodes" class="moove-xml-nodes">
+                    <?php
+                        $first_node_select = "";
+                        foreach ($this->xmlnodes as $nodekey => $nodecount) : ?>
+                        <?php if ( $first_node_select == '' ) : $first_node_select = $nodecount['key']; endif; ?>
+                        <option value="<?php echo $nodecount['key']; ?>"> <?php echo $nodekey.' ('.$nodecount['count'].') '.$nodecount['key'].''; ?> </option>
+                    <?php endforeach; ?>
+                </select>
+                <br / >
+                <br / >
+                <?php
+                return json_encode(
+                            array(
+                                'select_nodes'      =>  ob_get_clean(),
+                                'selected_element'  =>  $first_node_select,
+                                'response'          =>  'true'
+                            )
+                        );
+                return ob_get_clean();
+            else :
+                return json_encode( array( 'response' => 'false' ) );
+            endif;
 
         elseif ( $args['xmlaction'] === 'import' ) :
             $return_array['node_count'] = count( $xml );
-            if ( count( $xml->children() ) ) :
-                foreach ( $xml->children() as $key => $value ) :
+            if ( count( $xml ) ) :
+                foreach ( $xml as $key => $value ) :
                     Moove_Importer_Controller::moove_recurse_xml( $value );
                     $return_array['data'][]= $this->xmlreturn;
                     $this->xmlreturn = array();
@@ -97,12 +105,15 @@ class Moove_Importer_Controller {
                 $selected_node = str_replace("/","/atom:",$selected_node);
             endif;
             $xml = $xml->xpath( "$selected_node" );
+
             if ( count( $xml ) ) :
                 ob_start();
-                echo "<hr><h4>Node count: ". count( $xml )."</h4>";
+                echo "<hr><h4>Node count: ". count( $xml )." <span class='pagination-info'>Current item: 1 / " . count( $xml ) . " </span></h4>";
                 if ( count( $xml ) > 1 ) :
+                    echo "<span data-current='1'>";
                     echo "<a href='#' class='moove-xml-preview-pagination button-previous moove-hidden'>Previous</a>";
                     echo "<a href='#' class='moove-xml-preview-pagination button-next'>Next</a>";
+                    echo "</span>";
                 endif;
                 echo "<hr>";
                 $i == 0;
@@ -139,36 +150,23 @@ class Moove_Importer_Controller {
                 $return_keys = array_unique( $return_keys );
                 if ( count( $return_keys ) ) :
                     $select_options = "<option value='0'>Select a field</option>";
+                    $_xml = $xml;
                     foreach ($return_keys as $select_value) {
                         $select_options .= "<option value='".$select_value."'>".$select_value."</option>";
                     }
                 endif;
                 return json_encode( array('content' => ob_get_clean(), 'select_option' => $select_options ) );
             endif;
-        elseif ( $args['xmlaction'] === 'getnodes' ) :
-            $this->xmlnodes[$xml->getName()] = array(
-                'count' =>  $this->xmlnodes[$xml->getName()]['count'] + 1,
-                'name'  =>  $xml->getName(),
-                'key'   =>  $parent . "/" . $xml->getName()
-            );
-            $parent = $parent . "/" . $xml->getName();
-            Moove_Importer_Controller::moove_recurse_xml( $xml, $parent );
-            // $this->xmlnodes = array_unique( $this->xmlnodes );
-            ob_start(); ?>
-            <h4>Select your repeated XML element you want to import</h4>
-             <select name="moove-xml-nodes" id="moove-xml-nodes" class="moove-xml-nodes">
-                <?php foreach ($this->xmlnodes as $nodekey => $nodecount) : ?>
-                    <option value="<?php echo $nodecount['key']; ?>"> <?php echo $nodekey.' ('.$nodecount['count'].') '.$nodecount['key'].''; ?> </option>
-                <?php endforeach; ?>
-            </select>
-            <br / >
-            <br / >
-            <?php
-            return ob_get_clean();
+
         endif;
     }
     public function moove_create_post( $args ) {
-        return json_encode($args);
+
+        $post_data = json_decode( wp_unslash( $args['post_data'] ) );
+
+        var_dump( $post_data );
+         echo "<script>alert('Hello World');</script>";
+        //return true;
     }
 }
 $moove_importer_controller = new Moove_Importer_Controller();

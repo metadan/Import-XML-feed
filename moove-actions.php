@@ -99,7 +99,7 @@ class Moove_Importer_Actions {
 
 	public function moove_create_post() {
 		$args = array(
-			'post_data' 		=> sanitize_text_field(esc_sql($_POST['post_data'])),
+			'post_data' 		=> $_POST['post_data'],
 		);
 		$move_create_post = new Moove_Importer_Controller;
 		$create_post = $move_create_post->moove_create_post( $args );

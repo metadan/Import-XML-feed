@@ -1,4 +1,12 @@
-
+<div class="moove-importer-ajax-spinner">
+</div>
+<!-- moove-importer-ajax-spinner -->
+<div class="moove-importer-ajax-import-progress-bar">
+    <h3>progress bar</h3>
+    <span></span>
+    <span></span>
+</div>
+<!-- moove-importer-ajax-import-progress-bar -->
 <div class="moove-feed-importer-where moove-hidden">
 <!-- <div class="moove-feed-importer-where "> -->
     <h3>Matching</h3>
@@ -7,8 +15,11 @@
     <?php if ( count( $data ) ) : ?>
         <select name="moove-importer-post-type-select" id="moove-importer-post-type-select" class="moove-importer-log-settings">
             <option value="0">Select a post type</option>
-            <?php foreach ($data as $post_types) : ?>
-                <option value="<?php echo $post_types['post_type']; ?>"> <?php echo ucfirst( $post_types['post_type'] ); ?> </option>
+            <?php
+            foreach ($data as $post_types) :
+                $obj = get_post_type_object( $post_types['post_type'] );
+            ?>
+                <option value="<?php echo $post_types['post_type']; ?>"> <?php echo $obj->labels->singular_name; ?> </option>
             <?php endforeach; ?>
         </select>
     <?php endif; ?>
@@ -16,19 +27,29 @@
     <?php if ( count( $data ) ) : ?>
         <div class="moove-feed-importer-taxonomies moove-hidden">
             <div class="moove-post-fields">
+
+                <h4>Post title *</h4>
+                <span class="moove-title-error"></span>
+                <select name="moove-importer-post-type-posttitle" id="moove-importer-post-type-posttitle" class="moove-importer-dynamic-select" required>
+                </select>
+
+                <h4>Post content</h4>
+                <select name="moove-importer-post-type-postcontent" id="moove-importer-post-type-postcontent" class="moove-importer-dynamic-select" required>
+                </select>
+
+                <h4>Post excerpt</h4>
+                <select name="moove-importer-post-type-postexcerpt" id="moove-importer-post-type-postexcerpt" class="moove-importer-dynamic-select" required>
+                </select>
+
                 <h4>Post status</h4>
                 <select name="moove-importer-post-type-status" id="moove-importer-post-type-status" >
                     <option value="publish">Published</option>
                     <option value="pending">Pending review</option>
                     <option value="draft">Draft</option>
                 </select>
-                <h4>Post title</h4>
-                <select name="moove-importer-post-type-posttitle" id="moove-importer-post-type-posttitle" class="moove-importer-dynamic-select">
 
-                </select>
                 <h4>Featured image url</h4>
                 <select name="moove-importer-post-type-ftrimage" id="moove-importer-post-type-ftrimage" class="moove-importer-dynamic-select">
-
                 </select>
             </div>
             <!-- "moove-post-fields -->
@@ -39,24 +60,18 @@
                 $i = 0; ?>
                 <div class="moove_cpt_tax_<?php echo $post_types['post_type']; ?> moove_cpt_tax moove-hidden">
                     <h4>Taxonomies</h4>
-                    <?php foreach ($post_types['taxonomies'] as $taxonomy) :
+                    <?php foreach ($post_types['taxonomies'] as $tax_name => $taxonomy) :
                         $i++;
                         ?>
-                        <div class="moove-importer-taxonomy-box">
+                        <div class="moove-importer-taxonomy-box" data-taxonomy="<?php echo $tax_name; ?>">
                             <p class="moove-importer-tax-title"><?php echo $taxonomy->labels->name; ?></p>
                             <hr>
                             <p> Title: </p>
-                            <select name="moove-importer-post-type-title<?php echo $i; ?>" id="moove-importer-post-type-title-<?php echo $i; ?>" class="moove-importer-log-settings moove-importer-dynamic-select">
-                                <?php foreach ($data as $post_types) : ?>
+                            <select name="moove-importer-tax-title<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-title">
 
-                                    <option value="<?php echo $post_types['post_type']; ?>"> <?php echo ucfirst( $post_types['post_type'] ); ?> </option>
-                                <?php endforeach; ?>
                             </select>
                             <p> Slug: </p>
-                             <select name="moove-importer-post-type-title<?php echo $i; ?>" id="moove-importer-post-type-slug-<?php echo $i; ?>" class="moove-importer-log-settings moove-importer-dynamic-select">
-                                <?php foreach ($data as $post_types) : ?>
-                                    <option value="<?php echo $post_types['post_type']; ?>"> <?php echo ucfirst( $post_types['post_type'] ); ?> </option>
-                                <?php endforeach; ?>
+                             <select name="moove-importer-tax-slug<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-slug">
                             </select>
                             <br />
                         </div>
@@ -73,7 +88,7 @@
     <?php endif;?>
     <div class="moove-submit-btn-cnt moove-hidden">
         <br />
-        <a href="#" class="button button-primary moove-start-import-feed">IMPORT</a>
+        <a href="#" class="button button-primary moove-start-import-feed"> START IMPORT</a>
     </div>
     <!-- moove-submit-btn-cnt -->
 </div>

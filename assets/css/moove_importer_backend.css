@@ -51,3 +51,32 @@
     color: #555;
     margin-right: 10px;
 }
+.moove-form-container.feed_importer {
+    position: relative;
+}
+.moove-importer-ajax-spinner {
+    display: none;
+}
+.moove-form-container.feed_importer.ajax-loading-process .moove-importer-ajax-spinner {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,.6) url('../images/ajax_spinner.svg') no-repeat;
+    background-position: center;
+    z-index: 1;
+}
+.moove-title-error,
+.moove-xml-nodes-error {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: red;
+}
+.moove-form-container.feed_importer .pagination-info {
+    float: right;
+}
