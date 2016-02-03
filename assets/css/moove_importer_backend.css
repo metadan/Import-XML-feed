@@ -1,6 +1,8 @@
 .moove-feed-importer-from,
 .moove-feed-importer-where {
-    width: 49.8%;
+    width: 50%;
+    white-space: normal;
+    word-wrap: break-word;
     display: inline-block;
     padding: 15px;
     box-sizing: border-box;
@@ -53,6 +55,7 @@
 }
 .moove-form-container.feed_importer {
     position: relative;
+    white-space: nowrap;
 }
 .moove-importer-ajax-spinner {
     display: none;
@@ -79,4 +82,100 @@
 }
 .moove-form-container.feed_importer .pagination-info {
     float: right;
+}
+.moove-importer-ajax-import-progress-bar {
+    height: 20px;
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    background: #232323;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    padding: 5px;
+    -webkit-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+    -moz-box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+    box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+    z-index: 10;
+}
+.moove-importer-ajax-import-progress-bar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    background-color: #ffa32c;
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #ffa32c), color-stop(1, #ffa32c) );
+    background-image: -moz-linear-gradient( center bottom, #ffa32c 37%, #ffa32c 69% );
+    -webkit-box-shadow: inset 0 2px 9px rgba(255,255,255,0.3), inset 0 -2px 6px rgba(0,0,0,0.4);
+    -moz-box-shadow: inset 0 2px 9px rgba(255,255,255,0.3), inset 0 -2px 6px rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 9px rgba(255,255,255,0.3), inset 0 -2px 6px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+}
+.moove-importer-ajax-import-progress-bar span:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, rgba(255, 255, 255, .2)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255, 255, 255, .2)), color-stop(.75, rgba(255, 255, 255, .2)), color-stop(.75, transparent), to(transparent) );
+    background-image: -moz-linear-gradient( -45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent );
+    z-index: 1;
+    -webkit-background-size: 50px 50px;
+    -moz-background-size: 50px 50px;
+    background-size: 50px 50px;
+    -webkit-animation: move 2s linear infinite;
+    -moz-animation: move 2s linear infinite;
+    overflow: hidden;
+}
+.moove-importer-ajax-import-overlay {
+    background-color: #fff;
+    position: absolute;
+    padding-top: 30px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    min-height: 400px;
+    text-transform: uppercase;
+}
+.moove-importer-ajax-import-overlay .import-notice{
+    text-align: center;
+    height: 200px;
+
+    margin-bottom: 40px;
+}
+.moove-importer-ajax-import-overlay.import-work-on .import-notice {
+    background: url('../images/moove-gears.gif') no-repeat;
+    background-size: 100px;
+    background-position: bottom;
+}
+.moove-importer-ajax-import-overlay .import-notice {
+    background: url('../images/blog-green-check.gif') no-repeat;
+    background-size: 130px;
+    background-position: bottom;
+}
+.moove-importer-ajax-import-overlay.import-work-on .import-notice h4 {
+    color: red;
+}
+.moove-importer-ajax-import-overlay .import-notice h4 {
+    color: #ffa32c;
+    font-size: 16px;
+}
+.moove-importer-ajax-import-overlay .import-notice h2 {
+    text-transform: uppercase;
+    font-size: 30px;
+}
+.moove-importer-percentage {
+    position: relative;
+    top: 80px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 60px;
+    font-weight: 700;
 }

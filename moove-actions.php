@@ -87,9 +87,9 @@ class Moove_Importer_Actions {
 	public function moove_read_xml() {
 		$args = array(
 			'data' 		=> $_POST['data'],
-			'xmlaction'	=> sanitize_text_field(esc_sql($_POST['xmlaction'])),
-			'type'		=> sanitize_text_field(esc_sql($_POST['type'])),
-			'node'		=> sanitize_text_field(esc_sql($_POST['node']))
+			'xmlaction'	=> sanitize_text_field( esc_sql( $_POST['xmlaction'] ) ),
+			'type'		=> sanitize_text_field( esc_sql( $_POST['type'] ) ),
+			'node'		=> sanitize_text_field( esc_sql( $_POST['node'] ) )
 		);
 		$move_importer = new Moove_Importer_Controller;
 		$read_xml = $move_importer->moove_read_xml( $args );
@@ -99,7 +99,9 @@ class Moove_Importer_Actions {
 
 	public function moove_create_post() {
 		$args = array(
-			'post_data' 		=> $_POST['post_data'],
+			'key'			=> sanitize_text_field( esc_sql( $_POST['key'] ) ),
+			'value'			=> $_POST['value'],
+			'form_data'		=> $_POST['form_data'],
 		);
 		$move_create_post = new Moove_Importer_Controller;
 		$create_post = $move_create_post->moove_create_post( $args );

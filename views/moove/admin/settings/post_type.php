@@ -1,12 +1,22 @@
 <div class="moove-importer-ajax-spinner">
 </div>
 <!-- moove-importer-ajax-spinner -->
-<div class="moove-importer-ajax-import-progress-bar">
-    <h3>progress bar</h3>
-    <span></span>
-    <span></span>
+<div class="moove-importer-ajax-import-overlay import-work-on moove-hidden">
+    <div class="import-notice">
+        <h2>FEED IMPORT STARTED</h2>
+        <h4>Please wait finishing the import!</h4>
+    </div>
+    <!-- import-notice -->
+    <div class="moove-importer-ajax-import-progress-bar">
+        <span></span>
+    </div>
+    <!-- moove-importer-ajax-import-progress-bar -->
+    <div class="moove-importer-percentage">
+        0%
+    </div>
+    <!-- moove-importer-percentage -->
 </div>
-<!-- moove-importer-ajax-import-progress-bar -->
+<!-- moove-importer-ajax-import-overlay -->
 <div class="moove-feed-importer-where moove-hidden">
 <!-- <div class="moove-feed-importer-where "> -->
     <h3>Matching</h3>
@@ -93,7 +103,6 @@
     <!-- moove-submit-btn-cnt -->
 </div>
 <!-- moove-feed-importer-where -->
-
 <div class="moove-feed-importer-from">
     <h3>From</h3>
     <span> <a href="#" class="select_another_source button button-secondary"> Select Another Source </a> </span>

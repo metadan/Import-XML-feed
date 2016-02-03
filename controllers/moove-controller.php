@@ -118,6 +118,7 @@ class Moove_Importer_Controller {
                 echo "<hr>";
                 $i == 0;
                 $return_keys = array();
+                $readed_data = array();
                 foreach ( $xml as $key => $value ) :
                     $i++;
                     Moove_Importer_Controller::moove_recurse_xml( $value );
@@ -127,6 +128,10 @@ class Moove_Importer_Controller {
                         echo "<p>Attributes:<br/>";
                         foreach ( $value->attributes() as $attrkey => $attrval ) :
                             $return_keys[] = $attrkey;
+                            $readed_data[$i]['attr'][] = array(
+                                'key'   =>  $attrkey,
+                                'value' =>  $attrval
+                            );
                             $_attributes = implode( ', ', json_decode( json_encode( $attrval ), true ) );
                             echo "<i><strong>".$attrkey.": </strong><span>".$_attributes."</span></i><br />";
                         endforeach;
@@ -135,6 +140,10 @@ class Moove_Importer_Controller {
 
                     foreach ($this->xmlreturn as $xmlvalue) {
                         $return_keys[] = $xmlvalue['key'];
+                        $readed_data[$i]['values'][] = array(
+                            'key'   =>  $xmlvalue['key'],
+                            'value' =>  $xmlvalue['value']
+                        );
                     ?>
                         <p>
                             <strong>
@@ -155,18 +164,116 @@ class Moove_Importer_Controller {
                         $select_options .= "<option value='".$select_value."'>".$select_value."</option>";
                     }
                 endif;
-                return json_encode( array('content' => ob_get_clean(), 'select_option' => $select_options ) );
+                return json_encode(
+                    array(
+                        'content'       => ob_get_clean(),
+                        'select_option' => $select_options,
+                        'xml_json_data'   => json_encode( $readed_data )
+                    )
+                );
             endif;
 
         endif;
     }
+    /*
+     * Searches for $needle in the multidimensional array $haystack.
+     *
+     * @param mixed $needle The item to search for
+     * @param array $haystack The array to search
+     * @return array|bool The indices of $needle in $haystack across the
+     *  various dimensions. FALSE if $needle was not found.
+     */
+    private function moove_recursive_array_search($needle,$haystack) {
+        foreach($haystack as $key=>$value) {
+            if( $needle===$value ) {
+                return array($key);
+            } else if (is_array($value) && $subkey = Moove_Importer_Controller::moove_recursive_array_search($needle,$value)) {
+                array_unshift($subkey, $key);
+                return $subkey;
+            }
+        }
+    }
+
     public function moove_create_post( $args ) {
+        $form_data = $args['form_data'];
+        $key = json_decode( wp_unslash( $args['key'] ) );
+        $xml_data_values = $args['value'];
+        $new_form_data = array();
+        foreach ($form_data as $form_key => $form_value) :
+            if ( $form_value !== '0' && $form_key !== 'post_status' && $form_key !== 'post_type' ) :
+                if ( $form_key === 'taxonomies' && count( $form_value ) ) :
+                    $j = 0;
+                    foreach ($form_value as $tax_key => $tax_value) :
+                        if ( $tax_value['title'] !== '0' ) :
+                            $j++;
+                            $_key =  Moove_Importer_Controller::moove_recursive_array_search( $tax_value['title'] , $xml_data_values['values']) ;
+                            if ( is_array( $_key ) ) :
+                                $tax_title = $xml_data_values['values'][$_key[0]]['value'];
+                            endif;
 
-        $post_data = json_decode( wp_unslash( $args['post_data'] ) );
+                            if ( $tax_value['slug'] !== '0' ) :
+                                $_key =  Moove_Importer_Controller::moove_recursive_array_search( $tax_value['slug'] , $xml_data_values['values']) ;
+                                if ( is_array( $_key ) ) :
+                                    $tax_slug = $xml_data_values['values'][$_key[0]]['value'];
+                                endif;
+                            else :
+                                $tax_slug = "0";
+                            endif;
 
-        var_dump( $post_data );
-         echo "<script>alert('Hello World');</script>";
-        //return true;
+                            $new_form_data[ $form_key ][] = array(
+                                'taxonomy'      =>  $tax_value['taxonomy'],
+                                'slug'          =>  $tax_slug,
+                                'title'         =>  $tax_title,
+                            );
+                        endif;
+                    endforeach;
+                else :
+                    $_key =  Moove_Importer_Controller::moove_recursive_array_search( $form_value , $xml_data_values['values']) ;
+                    if ( is_array( $_key ) ) :
+                        $new_form_data[ $form_key ] = $xml_data_values['values'][$_key[0]]['value'];
+                    endif;
+                endif;
+            else :
+                if ( $form_key === 'post_status' || $form_key === 'post_type' ) :
+                    $new_form_data[ $form_key ] = $form_value;
+                endif;
+            endif;
+        endforeach;
+        // Create post object
+        $new_post = array(
+          'post_title'      =>  "",
+          'post_type'       =>  "",
+          'post_content'    =>  "",
+          'post_status'     =>  "",
+          'post_author'     =>  1,
+        );
+        foreach ( $new_form_data as $form_key => $form_value ) :
+            $new_post[ $form_key ] = $form_value;
+        endforeach;
+
+        // Insert the post into the database
+        $post_id = wp_insert_post( $new_post );
+
+        foreach ($new_form_data['taxonomies'] as $taxonomy_value) :
+            if ( $taxonomy_value['title'] !== "" ) {
+                $title = $taxonomy_value['title'];
+                $slug = sanitize_title( $taxonomy_value['slug'] );
+                $taxonomy = $taxonomy_value['taxonomy'];
+                if ( $slug !== "" ) {
+                    $term_taxonomy_id = wp_set_post_terms( $post_id, $slug, $taxonomy, true );
+                } else {
+                    $slug = sanitize_title( $taxonomy_value['title'] );
+                    $term_taxonomy_id = wp_set_post_terms( $post_id, $slug, $taxonomy, true );
+                }
+                $_new_taxonomy = get_term_by('name', $slug, $taxonomy);
+                wp_update_term($_new_taxonomy->term_id, $taxonomy, array(
+                  'name' => $title,
+                  'slug' => $slug
+                ));
+            }
+        endforeach;
+
+        return "true";
     }
 }
 $moove_importer_controller = new Moove_Importer_Controller();

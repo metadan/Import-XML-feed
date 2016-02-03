@@ -1,8 +1,10 @@
 
 (function($) {
-    var file;
-    var selected_node;
-    var ajax_action = "";
+    var file,
+        selected_node,
+        xml_content_json,
+        ajax_action = "";
+
     function MooveReadXML(data, type, xmlaction, node) {
         ajax_action = 'read';
         $.post(
@@ -17,7 +19,6 @@
             function(msg) {
                 if ( xmlaction === 'check') {
                     msg = JSON.parse(msg);
-                    console.log(msg);
                     if ( msg.response !== 'false' ) {
                         $('.moove-feed-xml-node-select .node-select-cnt').empty().append(msg.select_nodes).parent().show();
                         $('.moove-feed-importer-src-form').hide();
@@ -27,6 +28,7 @@
                     }
                 } else if ( xmlaction === 'preview' ) {
                     msg = JSON.parse(msg);
+                    xml_content_json = JSON.parse(msg.xml_json_data);
                     $('.moove-feed-xml-preview-container').empty().append(msg.content);
                     $('.moove-importer-dynamic-select').empty().append(msg.select_option);
 
@@ -39,20 +41,30 @@
         )
     }
 
-    function MooveCreatePost( post_data ) {
+    function MooveCreatePost( key, value, post_data_select, item_counter ) {
         ajax_action = 'import';
         $.post(
             ajaxurl,
             {
                 action: "moove_create_post",
-                post_data: post_data,
+                key : key,
+                value : value,
+                form_data : post_data_select
             },
             function(msg) {
                 console.log(msg);
+                var total_count = Object.keys(xml_content_json).length,
+                    percentage =  Math.round(item_counter*(100/total_count));
+                $('.moove-importer-ajax-import-progress-bar span').css('width',percentage+'%');
+                $('.moove-importer-percentage').text(percentage+'%');
+                if ( percentage == 100 ) {
+                    $('.moove-importer-ajax-import-overlay').removeClass('import-work-on').find('h2').text('Feed Import Finished').parent().find('h4').text('Thank you for choosing our services');
+                    $('.moove-importer-percentage').text(percentage+'%');
+                    $('.moove-importer-ajax-import-progress-bar span').css('width',percentage+'%');
+                }
             }
         )
     }
-
     function getXmlString(xml) {
       if (window.ActiveXObject) { return xml.xml; }
       return new XMLSerializer().serializeToString(xml);
@@ -131,7 +143,16 @@
                     post_featured_image :   $('#moove-importer-post-type-ftrimage option:selected').val(),
                     taxonomies          :   moove_array_to_object(taxonomies)
                 });
-                MooveCreatePost( JSON.stringify(post_data_select) );
+                var item_counter = 0;
+                $('.moove-feed-importer-where').hide();
+                $('.moove-feed-importer-from').hide();
+                $('.moove-importer-ajax-import-overlay').slideToggle('fast');
+
+                $.each(xml_content_json, function(key, value) {
+                    item_counter++;
+                    MooveCreatePost( key, value, post_data_select, item_counter );
+                });
+
             } else {
                 $('.moove-feed-importer-taxonomies .moove-title-error').text('Please select a field for title');
                 $('#moove-importer-post-type-posttitle').focus();
