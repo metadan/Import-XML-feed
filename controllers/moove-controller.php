@@ -124,20 +124,6 @@ class Moove_Importer_Controller {
                     Moove_Importer_Controller::moove_recurse_xml( $value );
                     if ( $i > 1 ) : $hidden_class = 'moove-hidden'; else : $hidden_class = 'moove-active'; endif;
                     echo "<div class='moove-importer-readed-feed $hidden_class' data-total='".count( $xml )."' data-no='$i'>";
-                    if ( count( $value->attributes() ) ) :
-                        echo "<p>Attributes:<br/>";
-                        foreach ( $value->attributes() as $attrkey => $attrval ) :
-                            $return_keys[] = $attrkey;
-                            $readed_data[$i]['attr'][] = array(
-                                'key'   =>  $attrkey,
-                                'value' =>  $attrval
-                            );
-                            $_attributes = implode( ', ', json_decode( json_encode( $attrval ), true ) );
-                            echo "<i><strong>".$attrkey.": </strong><span>".$_attributes."</span></i><br />";
-                        endforeach;
-                        echo "</p>";
-                    endif;
-
                     foreach ($this->xmlreturn as $xmlvalue) {
                         $return_keys[] = $xmlvalue['key'];
                         $readed_data[$i]['values'][] = array(
