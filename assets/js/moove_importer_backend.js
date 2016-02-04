@@ -129,7 +129,6 @@
                 $('.moove_cpt_tax_'+post_selected+' .moove-importer-taxonomy-box').each(function( index, value ){
                     taxonomies[index] = ({
                         taxonomy    :   $(this).attr('data-taxonomy'),
-                        slug        :   $(this).find('select.moove-importer-taxonomy-slug option:selected').val(),
                         title       :   $(this).find('select.moove-importer-taxonomy-title option:selected').val()
                     });
                 });
@@ -141,6 +140,7 @@
                     post_content        :   $('#moove-importer-post-type-postcontent option:selected').val(),
                     post_excerpt        :   $('#moove-importer-post-type-postexcerpt option:selected').val(),
                     post_featured_image :   $('#moove-importer-post-type-ftrimage option:selected').val(),
+                    post_author         :   $('#moove-importer-post-type-author option:selected').val(),
                     taxonomies          :   moove_array_to_object(taxonomies)
                 });
                 var item_counter = 0;

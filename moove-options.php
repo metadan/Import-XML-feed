@@ -45,6 +45,7 @@ class Moove_Importer_Options {
 	 */
 	function moove_importer_settings_page( ) {
 		$post_types = get_post_types( array( 'public' => true ) );
+		unset( $post_types['attachment'] );
 		$data = array();
 		if ( count( $post_types ) ) :
 			foreach ($post_types as $cpt) :

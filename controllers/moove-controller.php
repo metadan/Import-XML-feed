@@ -193,14 +193,106 @@ class Moove_Importer_Controller {
             }
         }
     }
+    /**
+     * Return an ID of an attachment by searching the database with the file URL.
+     *
+     * First checks to see if the $url is pointing to a file that exists in
+     * the wp-content directory. If so, then we search the database for a
+     * partial match consisting of the remaining path AFTER the wp-content
+     * directory. Finally, if a match is found the attachment ID will be
+     * returned.
+     *
+     * @param string $url The URL of the image (ex: http://mysite.com/wp-content/uploads/2013/05/test-image.jpg)
+     *
+     * @return int|null $attachment Returns an attachment ID, or null if no attachment is found
+     */
+    private function moove_get_attachment_id_from_src( $url ) {
+        $attachment_id = 0;
+        $dir = wp_upload_dir();
 
+        $file = basename( $url );
+        $query_args = array(
+            'post_type'   => 'attachment',
+            'post_status' => 'inherit',
+            'fields'      => 'ids',
+            'meta_query'  => array(
+                array(
+                    'value'   => $file,
+                    'compare' => 'LIKE',
+                    'key'     => '_wp_attachment_metadata',
+                ),
+            )
+        );
+        $query = new WP_Query( $query_args );
+        if ( $query->have_posts() ) {
+            foreach ( $query->posts as $post_id ) {
+                $meta = wp_get_attachment_metadata( $post_id );
+                $original_file       = basename( $meta['file'] );
+                $cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+                if ( $original_file === $file || in_array( $file, $cropped_image_files ) ) {
+                    $attachment_id = $post_id;
+                    break;
+                }
+            }
+            wp_reset_query();
+            wp_reset_postdata();
+        }
+        return $attachment_id;
+    }
+    private function moove_set_featured_image( $post_id, $image_url ) {
+        // Add Featured Image to Post
+        $upload_dir = wp_upload_dir(); // Set upload folder
+        $image_data = file_get_contents($image_url); // Get image data
+        $filename   = basename($image_url); // Create image file name
+
+        // Check folder permission and define file location
+        if( wp_mkdir_p( $upload_dir['path'] ) ) {
+            $file = $upload_dir['path'] . '/' . $filename;
+        } else {
+            $file = $upload_dir['basedir'] . '/' . $filename;
+        }
+        if ( $wp_filetype = wp_check_filetype( $filename, null ) ) {
+            if( !file_exists( $file ) ) :
+
+                // Create the image  file on the server
+                file_put_contents( $file, $image_data );
+
+                // Check image file type
+                $wp_filetype = wp_check_filetype( $filename, null );
+
+                // Set attachment data
+                $attachment = array(
+                    'post_mime_type' => $wp_filetype['type'],
+                    'post_title'     => sanitize_file_name( $filename ),
+                    'post_content'   => '',
+                    'post_status'    => 'inherit'
+                );
+
+                // Create the attachment
+                $attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+
+                // Include image.php
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                // Define attachment metadata
+                $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+
+                // Assign metadata to attachment
+                wp_update_attachment_metadata( $attach_id, $attach_data );
+            else :
+                $attach_id = Moove_Importer_Controller::moove_get_attachment_id_from_src( $file );
+            endif;
+            // And finally assign featured image to post
+            set_post_thumbnail( $post_id, $attach_id );
+        }
+    }
     public function moove_create_post( $args ) {
         $form_data = $args['form_data'];
         $key = json_decode( wp_unslash( $args['key'] ) );
         $xml_data_values = $args['value'];
         $new_form_data = array();
         foreach ($form_data as $form_key => $form_value) :
-            if ( $form_value !== '0' && $form_key !== 'post_status' && $form_key !== 'post_type' ) :
+            if ( $form_value !== '0' && $form_key !== 'post_status' && $form_key !== 'post_type' && $form_key !== 'post_author' && $form_key !== 'post_featured_image' ) :
                 if ( $form_key === 'taxonomies' && count( $form_value ) ) :
                     $j = 0;
                     foreach ($form_value as $tax_key => $tax_value) :
@@ -211,18 +303,8 @@ class Moove_Importer_Controller {
                                 $tax_title = $xml_data_values['values'][$_key[0]]['value'];
                             endif;
 
-                            if ( $tax_value['slug'] !== '0' ) :
-                                $_key =  Moove_Importer_Controller::moove_recursive_array_search( $tax_value['slug'] , $xml_data_values['values']) ;
-                                if ( is_array( $_key ) ) :
-                                    $tax_slug = $xml_data_values['values'][$_key[0]]['value'];
-                                endif;
-                            else :
-                                $tax_slug = "0";
-                            endif;
-
                             $new_form_data[ $form_key ][] = array(
                                 'taxonomy'      =>  $tax_value['taxonomy'],
-                                'slug'          =>  $tax_slug,
                                 'title'         =>  $tax_title,
                             );
                         endif;
@@ -236,17 +318,13 @@ class Moove_Importer_Controller {
             else :
                 if ( $form_key === 'post_status' || $form_key === 'post_type' ) :
                     $new_form_data[ $form_key ] = $form_value;
-                endif;
+                elseif ( $form_key === 'post_author' ):
+                    $new_form_data[ $form_key ] = intval( $form_value );
+                endif;;
             endif;
         endforeach;
         // Create post object
-        $new_post = array(
-          'post_title'      =>  "",
-          'post_type'       =>  "",
-          'post_content'    =>  "",
-          'post_status'     =>  "",
-          'post_author'     =>  1,
-        );
+        $new_post = array();
         foreach ( $new_form_data as $form_key => $form_value ) :
             $new_post[ $form_key ] = $form_value;
         endforeach;
@@ -255,23 +333,25 @@ class Moove_Importer_Controller {
         $post_id = wp_insert_post( $new_post );
 
         foreach ($new_form_data['taxonomies'] as $taxonomy_value) :
-            if ( $taxonomy_value['title'] !== "" ) {
+
+            if ( $taxonomy_value['title'] !== "0" ) {
                 $title = $taxonomy_value['title'];
-                $slug = sanitize_title( $taxonomy_value['slug'] );
                 $taxonomy = $taxonomy_value['taxonomy'];
-                if ( $slug !== "" ) {
-                    $term_taxonomy_id = wp_set_post_terms( $post_id, $slug, $taxonomy, true );
-                } else {
-                    $slug = sanitize_title( $taxonomy_value['title'] );
-                    $term_taxonomy_id = wp_set_post_terms( $post_id, $slug, $taxonomy, true );
-                }
-                $_new_taxonomy = get_term_by('name', $slug, $taxonomy);
+
+                $slug = sanitize_title( $taxonomy_value['title'] );
+
+                wp_set_post_terms( $post_id, $slug, $taxonomy, true );
+
+                $_new_taxonomy = get_term_by( 'name', $slug, $taxonomy );
+
                 wp_update_term($_new_taxonomy->term_id, $taxonomy, array(
                   'name' => $title,
                   'slug' => $slug
                 ));
             }
         endforeach;
+
+        Moove_Importer_Controller::moove_set_featured_image( $post_id, $new_form_data[ 'post_featured_image' ] );
 
         return "true";
     }

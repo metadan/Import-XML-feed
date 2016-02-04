@@ -15,6 +15,10 @@
         0%
     </div>
     <!-- moove-importer-percentage -->
+    <div class="moove-start-new-import">
+        <a href="<?php echo home_url( '/wp-admin/options-general.php?page=moove-importer&tab=feed_importer' ); ?>" class="button button-secondary">Start new import</a>
+    </div>
+    <!-- moove-start-new-import -->
 </div>
 <!-- moove-importer-ajax-import-overlay -->
 <div class="moove-feed-importer-where moove-hidden">
@@ -29,7 +33,8 @@
             foreach ($data as $post_types) :
                 $obj = get_post_type_object( $post_types['post_type'] );
             ?>
-                <option value="<?php echo $post_types['post_type']; ?>"> <?php echo $obj->labels->singular_name; ?> </option>
+                <option value="<?php echo $post_types['post_type']; ?>">
+                    <?php echo $obj->labels->singular_name; ?> </option>
             <?php endforeach; ?>
         </select>
     <?php endif; ?>
@@ -58,6 +63,14 @@
                     <option value="draft">Draft</option>
                 </select>
 
+                <h4>Post author</h4>
+                <select name="moove-importer-post-type-author" id="moove-importer-post-type-author" >
+                    <?php $wp_users = get_users( array( 'who' => 'authors' ) ); ?>
+                    <?php foreach ( $wp_users as $wp_user ) : ?>
+                        <option value="<?php echo $wp_user->ID ?>" <?php if ( wp_get_current_user()->ID === $wp_user->ID ) : echo "selected='selected'"; endif; ?> ><?php echo $wp_user->user_nicename; ?></option>
+                    <?php endforeach; ?>
+                </select>
+
                 <h4>Featured image url</h4>
                 <select name="moove-importer-post-type-ftrimage" id="moove-importer-post-type-ftrimage" class="moove-importer-dynamic-select">
                 </select>
@@ -79,9 +92,6 @@
                             <p> Title: </p>
                             <select name="moove-importer-tax-title<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-title">
 
-                            </select>
-                            <p> Slug: </p>
-                             <select name="moove-importer-tax-slug<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-slug">
                             </select>
                             <br />
                         </div>
