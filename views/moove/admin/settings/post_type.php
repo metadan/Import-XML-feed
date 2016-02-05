@@ -23,7 +23,7 @@
 <!-- moove-importer-ajax-import-overlay -->
 <div class="moove-feed-importer-where moove-hidden">
 <!-- <div class="moove-feed-importer-where "> -->
-    <h3>Matching</h3>
+    <h3><?php _e( 'Feed data matching' , 'moove' ); ?></h3>
     <hr>
     <h4><?php _e( 'Select a Post Type' , 'moove' ); ?></h4>
     <?php if ( count( $data ) ) : ?>
@@ -73,31 +73,32 @@
                 </select>
             </div>
             <!-- "moove-post-fields -->
-        <br />
-        <hr>
-        <?php foreach ($data as $post_types) :
-            if ( count( $post_types['taxonomies'] ) ) :
-                $i = 0; ?>
-                <div class="moove_cpt_tax_<?php echo $post_types['post_type']; ?> moove_cpt_tax moove-hidden">
-                    <h4><?php _e( 'Taxonomies' , 'moove'); ?></h4>
-                    <?php foreach ($post_types['taxonomies'] as $tax_name => $taxonomy) :
-                        $i++;
-                        ?>
-                        <div class="moove-importer-taxonomy-box" data-taxonomy="<?php echo $tax_name; ?>">
-                            <p class="moove-importer-tax-title"><?php echo $taxonomy->labels->name; ?></p>
-                            <hr>
-                            <p><?php _e( 'Title' , 'moove' ); ?>: </p>
-                            <select name="moove-importer-tax-title<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-title">
+            <br />
+            <hr>
+            <?php
+            foreach ( $data as $post_types ) :
+                if ( count( $post_types['taxonomies'] ) ) :
+                    $i = 0; ?>
+                    <div class="moove_cpt_tax_<?php echo $post_types['post_type']; ?> moove_cpt_tax moove-hidden">
+                        <h4><?php _e( 'Taxonomies' , 'moove'); ?></h4>
+                        <?php foreach ( $post_types['taxonomies'] as $tax_name => $taxonomy ) :
+                            $i++;
+                            ?>
+                            <div class="moove-importer-taxonomy-box" data-taxonomy="<?php echo $tax_name; ?>">
+                                <p class="moove-importer-tax-title"><?php echo $taxonomy->labels->name; ?></p>
+                                <hr>
+                                <p><?php _e( 'Title' , 'moove' ); ?>: </p>
+                                <select name="moove-importer-tax-title<?php echo $i; ?>" class="moove-importer-dynamic-select moove-importer-taxonomy-title">
 
-                            </select>
-                            <br />
-                        </div>
-                        <!-- moove-importer-taxonomy-box -->
-                    <?php endforeach; ?>
-                </div>
-                <!-- moove_cpt_tax -->
-            <?php endif;
-        endforeach; ?>
+                                </select>
+                                <br />
+                            </div>
+                            <!-- moove-importer-taxonomy-box -->
+                        <?php endforeach; ?>
+                    </div>
+                    <!-- moove_cpt_tax -->
+                <?php endif;
+            endforeach; ?>
         </div>
         <!-- moove-feed-importer-taxonomies -->
     <?php endif;?>
@@ -109,7 +110,7 @@
 </div>
 <!-- moove-feed-importer-where -->
 <div class="moove-feed-importer-from">
-    <h3>From</h3>
+    <h3><?php _e( 'Feed import setup' , 'moove' ); ?></h3>
     <span> <a href="#" class="select_another_source button button-secondary"><?php _e( 'Select Another Source' , 'moove' ); ?></a> </span>
     <hr>
     <div class="moove-feed-xml-cnt">

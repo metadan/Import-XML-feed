@@ -2,7 +2,7 @@
 /**
  * Moove_Importer_Content File Doc Comment
  *
- * @category Moove_Importer_Content
+ * @category 	Moove_Importer_Content
  * @package   moove-feed-importer
  * @author    Gaspar Nemes
  */
@@ -31,6 +31,5 @@ class Moove_Importer_Content {
 	function moove_register_content_elements() {
 
 	}
-
 }
 $moove_importer_content_provider = new Moove_Importer_Content();

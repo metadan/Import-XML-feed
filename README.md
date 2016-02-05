@@ -1,17 +1,13 @@
-# Moove Activity Plugin
+# Moove Feed Importer Plugin
 
-This plugin adds the ability to track the content visits / updates for any kind of custom post type or page.
+This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS.
 
-You can enable or disable the tracking for each post type registered on your site.
+### The process of import:
 
-### The following data will be logged:
-
-1.  Date/time
-2.  User name
-3.  Activity (visited/updated)
-4.  Client IP
-5.  Client Location (by IP Address)
-6.  Referrer url
+1.  Select the source ( URL or FILE UPLOAD )
+2.  Select your repeated XML element you want to import
+3.  Select the post type to content
+4.  Matching the fields
 
 ### Global Settings
 
@@ -29,7 +25,7 @@ On the left admin menu, below the Dashboard menu item there is an "Activity log"
 
 **Features of the Activity log page include the following:**
 
-1.  PAGINATION - load more pagination for loading log entries via Ajax.
+1.  PAGINATION - You have the posibility to check each selected node
 2.  CLEARING LOGS - You have the possibility to clear log entries per post type or you can clear all log entries at once.
 3.  EXPORT - You have the possibility to export your log as a .csv file
-4.  GROUPING - Activity log entries are grouped by post type and subsequently the logs are grouped by post.
+4.  GROUPING - Activity log entries are grouped by post type and subsequently the logs are grouped by <post class=""></post>

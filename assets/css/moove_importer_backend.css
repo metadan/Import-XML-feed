@@ -8,8 +8,43 @@
     box-sizing: border-box;
     vertical-align: top;
 }
+.moove-feed-importer-from h3,
+.moove-feed-importer-where h3 {
+    text-transform: uppercase;
+    color: #232323;
+}
 .feed_importer {
     background-color: #fff;
+}
+.feed_importer .button.button-primary {
+    color: #fff;
+    background-color: #232323;
+    text-shadow:  none;
+    box-shadow: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 0;
+    outline: none;
+    border: none;
+    font-family: Helvetica,Arial,sans-serif;
+}
+.feed_importer .button.button-primary:hover {
+    background-color: #ffa32c;
+    color: #232323;
+    border-color: #ffa32c;
+}
+.moove-importer-plugin-wrap {
+    position: relative;
+}
+.moove-importer-plugin-wrap .moove-logo {
+    display: block;
+    width: 67px;
+    height: 16px;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    background: url('../images/logo_moove.png') no-repeat;
+    background-size: cover;
 }
 .moove-hidden {
     display: none;
@@ -17,6 +52,12 @@
 .moove-importer-plugin-wrap input[type='text'],
 .moove-importer-plugin-wrap select {
     width: 100%;
+    outline: 0;
+    box-shadow: none;
+}
+
+.moove-importer-plugin-wrap input[type='text']:focus {
+    border-color: #232323;
 }
 .moove-importer-taxonomy-box {
     padding: 10px;
@@ -34,7 +75,8 @@
     padding: 5px 10px;
     height: auto;
     line-height: 15px;
-    border: 1px solid #23282d;
+    border: 1px solid #232323;
+    color: #232323;
     box-shadow: none;
     background-color: transparent;
     border-radius: 0;
@@ -44,14 +86,30 @@
     font-size: 10px;
     text-transform: uppercase;
 }
+.moove-feed-importer-from .select_another_source:hover {
+    background-color: #232323;
+    color: #fff;
+    border-color: #232323;
+}
 .moove-xml-preview-pagination {
     padding: 2px 5px;
     text-transform: uppercase;
     font-size: 10px;
     text-decoration: none;
-    border: 1px solid #23282d;
-    color: #555;
+    border: 1px solid #232323;
+    color: #232323;
+    text-shadow: none;
     margin-right: 10px;
+    outline: 0;
+    box-shadow: none;
+}
+.moove-xml-preview-pagination:hover {
+    background-color: #232323;
+    color: #fff;
+}
+.moove-xml-preview-pagination:focus {
+    box-shadow: none;
+    outline: 0;
 }
 .moove-form-container.feed_importer {
     position: relative;

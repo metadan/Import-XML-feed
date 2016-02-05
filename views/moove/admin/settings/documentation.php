@@ -1,6 +1,6 @@
 <div class="moove-importer-plugin-documentation">
     <br>
-    <h1>Moove Feed Importer Plugin</h1>
+    <h1><?php _e( 'Moove Feed Importer Plugin' , 'moove' ); ?></h1>
     <p>Description....</p>
 
 </div>

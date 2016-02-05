@@ -21,7 +21,6 @@ class Moove_Importer_Options {
 	function __construct() {
 		add_action( 'admin_menu', array( $this, 'moove_importer_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'moove_importer_page_init' ) );
-		//add_action( 'update_option_moove_post_act', array( $this, 'moove_activity_check_settings' ) );
 	}
 
 	/**
@@ -41,18 +40,18 @@ class Moove_Importer_Options {
 	/**
 	 * Settings page registration
 	 *
-	 * @return settings_page view
+	 * @return void
 	 */
-	function moove_importer_settings_page( ) {
+	function moove_importer_settings_page() {
 		$post_types = get_post_types( array( 'public' => true ) );
 		unset( $post_types['attachment'] );
 		$data = array();
 		if ( count( $post_types ) ) :
-			foreach ($post_types as $cpt) :
+			foreach ( $post_types as $cpt ) :
 				$taxonomies = get_object_taxonomies( $cpt, 'object' );
 				$data[ $cpt ] = array(
-					'post_type'		=> 	$cpt,
-					'taxonomies'	=>	$taxonomies
+					'post_type'		=> $cpt,
+					'taxonomies'	=> $taxonomies,
 				);
 			endforeach;
 		endif;

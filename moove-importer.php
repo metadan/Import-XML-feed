@@ -1,5 +1,7 @@
 <?php
 /**
+ *  Contributors: mooveagency , gaspar.nemes
+ *  Stable tag:
  *  Plugin Name: Moove Feed Importer
  *  Plugin URI: http://www.mooveagency.com
  *  Description: Import content from XML, CSV
@@ -19,7 +21,6 @@ register_deactivation_hook( __FILE__ , 'moove_importer_deactivate' );
 function moove_importer_activate() {
 
 }
-
 
 /**
  * Function on plugin deactivation. It removes the pages created before.
