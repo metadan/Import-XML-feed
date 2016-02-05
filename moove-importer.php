@@ -1,10 +1,10 @@
 <?php
 /**
- *  Contributors: mooveagency , gaspar.nemes
+ *  Contributors: mooveagency, gaspar.nemes
  *  Stable tag:
  *  Plugin Name: Moove Feed Importer
  *  Plugin URI: http://www.mooveagency.com
- *  Description: Import content from XML, CSV
+ *  Description: This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS and add the content to any post type in your
  *  Version: 1.0.0
  *  Author: Gaspar Nemes
  *  Author URI: http://www.mooveagency.com
