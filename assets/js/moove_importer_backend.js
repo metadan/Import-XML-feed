@@ -3,6 +3,7 @@
     var file,
         selected_node,
         xml_content_json,
+        item_counter = 0,
         ajax_action = "";
 
     function MooveReadXML(data, type, xmlaction, node) {
@@ -23,6 +24,7 @@
                         $('.moove-feed-xml-node-select .node-select-cnt').empty().append(msg.select_nodes).parent().show();
                         $('.moove-feed-importer-src-form').hide();
                         selected_node = msg.selected_element;
+                        $('.select_another_source').parent().removeClass('moove-hidden');
                     } else {
                         invalid_xml_action();
                     }
@@ -41,7 +43,7 @@
         )
     }
 
-    function MooveCreatePost( key, value, post_data_select, item_counter ) {
+    function MooveCreatePost( key, value, post_data_select ) {
         ajax_action = 'import';
         $.post(
             ajaxurl,
@@ -52,9 +54,9 @@
                 form_data : post_data_select
             },
             function(msg) {
-                console.log(msg);
+                item_counter = item_counter + 1;
                 var total_count = Object.keys(xml_content_json).length,
-                    percentage =  Math.round(item_counter*(100/total_count));
+                    percentage =  Math.ceil(item_counter*(100/total_count));
                 $('.moove-importer-ajax-import-progress-bar span').css('width',percentage+'%');
                 $('.moove-importer-percentage').text(percentage+'%');
                 if ( percentage == 100 ) {
@@ -143,14 +145,12 @@
                     post_author         :   $('#moove-importer-post-type-author option:selected').val(),
                     taxonomies          :   moove_array_to_object(taxonomies)
                 });
-                var item_counter = 0;
                 $('.moove-feed-importer-where').hide();
                 $('.moove-feed-importer-from').hide();
                 $('.moove-importer-ajax-import-overlay').slideToggle('fast');
 
                 $.each(xml_content_json, function(key, value) {
-                    item_counter++;
-                    MooveCreatePost( key, value, post_data_select, item_counter );
+                    MooveCreatePost( key, value, post_data_select);
                 });
 
             } else {
@@ -208,6 +208,7 @@
             $('.moove-feed-xml-preview').hide();
             $('.moove-feed-importer-where').addClass('moove-hidden');
             $('.moove-feed-xml-cnt').show();
+            $(this).parent().addClass('moove-hidden');
         });
 
         $('.moove-feed-xml-preview-container').on( 'click', '.moove-xml-preview-pagination', function(e) {

@@ -111,7 +111,7 @@
 <!-- moove-feed-importer-where -->
 <div class="moove-feed-importer-from">
     <h3><?php _e( 'Feed import setup' , 'moove' ); ?></h3>
-    <span> <a href="#" class="select_another_source button button-secondary"><?php _e( 'Select Another Source' , 'moove' ); ?></a> </span>
+    <span class="moove-hidden"><a href="#" class="select_another_source button button-secondary"><?php _e( 'Select Another Source' , 'moove' ); ?></a> </span>
     <hr>
     <div class="moove-feed-xml-cnt">
         <form action="" class="moove-feed-importer-src-form">
