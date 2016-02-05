@@ -1,43 +1,40 @@
 === Moove Activity Tracking ===
-Tags: activity tracking, activity log, tracking
+Tags: xml import, rss import, xml feed import, rss feed import, import
 Requires at least: 3.0.1 or higher
 Tested up to: 4.3
 License: GPLv2
 
-This plugin adds the ability to track the content visits / updates of any kind of custom post type or page.
+This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS and add the content to any post type in your WordPress install. It also supports importing taxonomies alongside posts.
 
 == Description ==
 
-This plugin adds the ability to track the content visits / updates for any kind of custom post type or page.
-You can enable or disable the tracking for each post type registered on your site.
+This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS and add the content to any post type in your WordPress install. It also supports importing taxonomies alongside posts.
 
-The following data will be logged:
-- Date/time
-- User name
-- Activity (visited/updated)
-- Client IP
-- Client Location (by IP Address)
-- Referrer url
-- Global Settings
+The process of import:
+- Select the source ( URL or FILE UPLOAD )
+- Select your repeated XML element you want to import - This should be the node in your XML file which will be considered a post upon import.
+- Select the post type you want to import the content to.
+- Match the fields from the XML node you've selected (step 2) to the corresponding fields you have available on the post type.
 
-Under the Global settings page found under Settings -> Moove Activity Log you can set up activity logging globally per all the defined post types in your WordPress installation. Also, you can define the time frame/period to keep the logs in the database. This feature is really handy when you want to log activity for smaller or larger periods of time, but be careful when you set a large period it can affect your server performance and database size.
+* XML files and URLs *
+The XML source file should be a valid XML file. The plugin does check if the URL source or the Uploaded file is valid for import and processing. If you use the URL source for importing, please make sure the URL you are using is not password protected with HTTP Auth or any other form of authentification (it needs to be public).
 
-When you DISABLE logging for a custom post type, all your logs will be deleted from the database. You have to confirm this before it deletes everything, but be sure you want to do this before disabling logging, or export your data in CSV beforehand.
+Accepted formats: XML 1.0, XML 2.0, Atom 1, RSS
 
-* Overriding the global settings *
-You can override the global post type tracking settings for each post by using the Moove Activity meta box when editing a post.
+* XML Preview *
+After sucessfully uploading an XML file or reading an external URL, the plugin will present you with an XML preview of the selected node, which can be used to check if you've selected the correct node or you have all the data read correctly by the plugin. This preview presents one item from the selected node and it is paginated so you can navigate back and forward between the elements.
 
-* Activity log *
+* Linking Taxonomies to Posts *
 
-On the left admin menu, below the Dashboard menu item there is an "Activity log" page, this is where you can see the log entries.
+This plugin allows you to import categories/taxonomies from the XML file and link the imported posts to these taxonomies.
 
-Features of the Activity log page include the following:
-- PAGINATION - load more pagination for loading log entries via Ajax.
-- CLEARING LOGS - You have the possibility to clear log entries per post type or you can clear all log entries at once.
-- EXPORT - You have the possibility to export your log as a .csv file
-- GROUPING - Activity log entries are grouped by post type and subsequently the logs are grouped by post.
+First you need to have the taxonomies created in WordPress to allow the plugin to import into these taxonomies. By default WordPress has two taxonomies: categories and tags.
+
+* Importing and linking multiple taxonomies to one post *
+
+To import and link one post to multiple taxonomies, you need to have an XML element in your selected node with a list of categories separated by commas. These elements will be recognized and imported separately as taxonomy terms.
 
 == Installation ==
 1. Upload the plugin files to the plugins directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the \'Plugins\' screen in WordPress
-3. Use the Settings->Moove activity log screen to configure the plugin
+3. Use the Settings->Moove feed importer screen to configure the plugin
