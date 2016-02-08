@@ -2,8 +2,9 @@
 <span class="moove-logo"></span>
 	<h1><?php _e('Feed Importer','moove'); ?></h1>
     <?php
-        if( isset( $_GET[ 'tab' ] ) ) {
-            $active_tab = $_GET[ 'tab' ];
+        $current_tab_feed = sanitize_text_field( wp_unslash( $_GET[ 'tab' ]  ) );
+        if( isset( $current_tab_feed ) ) {
+            $active_tab = $current_tab_feed;
         } else {
             $active_tab = "feed_importer";
         } // end if
