@@ -1,4 +1,4 @@
-=== Moove Activity Tracking ===
+=== Import XML feed ===
 Tags: xml import, rss import, xml feed import, rss feed import, import
 Requires at least: 3.0.1 or higher
 Tested up to: 4.3

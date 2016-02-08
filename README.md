@@ -1,4 +1,4 @@
-# Moove Feed Importer Plugin
+# Import XML feed - WordPress Plugin
 
 This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS and add the content to any post type in your WordPress install. It also supports importing taxonomies alongside posts.
 
