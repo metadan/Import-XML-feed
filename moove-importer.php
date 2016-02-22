@@ -5,7 +5,7 @@
  *  Plugin Name: Import XML feed
  *  Plugin URI: http://www.mooveagency.com
  *  Description: This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS.
- *  Version: 1.0.2
+ *  Version: 1.0.3
  *  Author: Moove Agency
  *  Author URI: http://www.mooveagency.com
  *  License: GPLv2
@@ -29,7 +29,6 @@ function moove_importer_deactivate() {
 
 }
 
-include_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '/third-party/simple_html_dom-master/simple_html_dom.php' );
 include_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'moove-view.php' );
 include_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'moove-content.php' );
 include_once( dirname( __FILE__ ).DIRECTORY_SEPARATOR.'moove-options.php' );

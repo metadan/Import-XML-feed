@@ -3,7 +3,7 @@
 	<h1><?php _e('Feed Importer','moove'); ?></h1>
     <?php
         $current_tab_feed = sanitize_text_field( wp_unslash( $_GET[ 'tab' ]  ) );
-        if( isset( $current_tab_feed ) ) {
+        if( isset( $current_tab_feed ) && $current_tab_feed !== '' ) {
             $active_tab = $current_tab_feed;
         } else {
             $active_tab = "feed_importer";

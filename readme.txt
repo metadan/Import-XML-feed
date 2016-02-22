@@ -46,6 +46,9 @@ To import and link one post to multiple taxonomies, you need to have an XML elem
 
 == Changelog ==
 
+= 1.0.3. =
+* Third party include fixed
+
 = 1.0.2. =
 * Validated, sanitized and escaped inputs
 
