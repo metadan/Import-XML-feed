@@ -19,7 +19,7 @@
             },
             function(msg) {
                 if ( xmlaction === 'check') {
-                    msg = JSON.parse(msg);
+                   msg = JSON.parse(msg);
                     if ( msg.response !== 'false' ) {
                         $('.moove-feed-xml-node-select .node-select-cnt').empty().append(msg.select_nodes).parent().show();
                         $('.moove-feed-importer-src-form').hide();
@@ -175,11 +175,9 @@
             if ( $('input[name=moove-importer-feed-src]:checked', '.moove-feed-importer-from').val() == 'url' ) {
                 xml = $('#moove_importer_url').val();
                 var ext = xml.substr(xml.lastIndexOf('.') + 1);
-                if($.inArray(ext, ['xml','rss']) == -1) {
-                    invalid_xml_action();
-                } else {
-                    MooveReadXML(xml,'url','check','');
-                }
+
+                MooveReadXML(xml,'url','check','');
+
             } else {
                 var ext = $('#moove_importer_file').val().split('.').pop().toLowerCase();
                 if($.inArray(ext, ['xml','rss']) == -1) {

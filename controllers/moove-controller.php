@@ -114,6 +114,7 @@ class Moove_Importer_Controller {
             return true;
         elseif ( $args['xmlaction'] === 'preview' ) :
             $selected_node = $args['node'];
+            $xxml = $xml;
             if ( $xml->getNamespaces(true) ) :
                 $xml->registerXpathNamespace( 'atom' , 'http://www.w3.org/2005/Atom' );
                 $selected_node = str_replace( "/" , "/atom:" , $selected_node );
@@ -122,6 +123,60 @@ class Moove_Importer_Controller {
 
             if ( count( $xml ) ) :
                 ob_start();
+
+                echo "<hr><h4>Node count: ". count( $xml )." <span class='pagination-info'>Current item: 1 / " . count( $xml ) . " </span></h4>";
+                if ( count( $xml ) > 1 ) :
+                    echo "<span data-current='1'>";
+                    echo "<a href='#' class='moove-xml-preview-pagination button-previous button-disabled'>Previous</a>";
+                    echo "<a href='#' class='moove-xml-preview-pagination button-next'>Next</a>";
+                    echo "</span>";
+                endif;
+                echo "<hr>";
+                $i == 0;
+                $return_keys = array();
+                $readed_data = array();
+                foreach ( $xml as $key => $value ) :
+                    $i++;
+                    Moove_Importer_Controller::moove_recurse_xml( $value );
+                    if ( $i > 1 ) : $hidden_class = 'moove-hidden'; else : $hidden_class = 'moove-active'; endif;
+                    echo "<div class='moove-importer-readed-feed $hidden_class' data-total='".count( $xml )."' data-no='$i'>";
+                    foreach ( $this->xmlreturn as $xmlvalue ) :
+                        $return_keys[] = $xmlvalue['key'];
+                        $readed_data[ $i ]['values'][] = array(
+                            'key'   =>  $xmlvalue['key'],
+                            'value' =>  $xmlvalue['value']
+                        );?>
+                        <p>
+                            <strong>
+                                <?php echo $xmlvalue['key']; ?>:
+                            </strong>
+                            <?php echo $xmlvalue['value']; ?>
+                        </p>
+                    <?php
+                    endforeach;
+                    $this->xmlreturn = null;
+                    echo "</div>";
+                endforeach;
+                $return_keys = array_unique( $return_keys );
+                if ( count( $return_keys ) ) :
+                    $select_options = "<option value='0'>Select a field</option>";
+                    $_xml = $xml;
+                    foreach ( $return_keys as $select_value ) :
+                        $select_options .= "<option value='" . $select_value . "'>" . $select_value . "</option>";
+                    endforeach;
+                endif;
+                return json_encode(
+                    array(
+                        'content'           =>  ob_get_clean(),
+                        'select_option'     =>  $select_options,
+                        'xml_json_data'     =>  json_encode( $readed_data )
+                    )
+                );
+            else :
+                $selected_node = $args['node'];
+                $xml = $xxml->xpath( "$selected_node" );
+                ob_start();
+
                 echo "<hr><h4>Node count: ". count( $xml )." <span class='pagination-info'>Current item: 1 / " . count( $xml ) . " </span></h4>";
                 if ( count( $xml ) > 1 ) :
                     echo "<span data-current='1'>";
