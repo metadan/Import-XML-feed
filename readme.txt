@@ -1,4 +1,4 @@
-=== Import XML feed ===
+I=== Import XML feed ===
 Contributors: mooveagency, gaspar.nemes
 Stable tag: trunk
 Tags: xml import, rss import, xml feed import, rss feed import, import
@@ -45,6 +45,9 @@ To import and link one post to multiple taxonomies, you need to have an XML elem
 3. Use the Settings->Moove feed importer screen to configure the plugin
 
 == Changelog ==
+
+= 1.0.4. =
+* Rss "Atom" namespase issue fixed
 
 = 1.0.3. =
 * Third party include fixed

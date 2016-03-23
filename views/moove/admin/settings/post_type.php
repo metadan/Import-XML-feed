@@ -139,7 +139,7 @@
             <button class="button button-primary moove-importer-read-file"><?php _e( 'Check DATA' , 'moove' ); ?></button>
             <div class="moove-feed-xml-error moove-hidden">
                 <h4 style="color: red">
-                    <strong><?php _e( 'Wrong or unreadable XML file! Please try again!', 'moove' ); ?></strong>
+                    <strong><?php _e( 'Wrong or unreadable XML file! Please try again! Check your file extension, should be *.xml or *.rss', 'moove' ); ?></strong>
                 </h4>
             </div>
             <!-- moove-feed-xml-error -->
