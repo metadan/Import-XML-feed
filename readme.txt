@@ -1,9 +1,9 @@
-I=== Import XML feed ===
+=== Import XML feed ===
 Contributors: mooveagency, gaspar.nemes
 Stable tag: trunk
 Tags: xml import, rss import, xml feed import, rss feed import, import
 Requires at least: 3.0.1 or higher
-Tested up to: 4.4
+Tested up to: 4.5
 License: GPLv2
 
 This plugin adds the ability to import content from an external XML/RSS file, or from an uploaded XML/RSS.
@@ -39,12 +39,23 @@ First you need to have the taxonomies created in WordPress to allow the plugin t
 
 To import and link one post to multiple taxonomies, you need to have an XML element in your selected node with a list of categories separated by commas. These elements will be recognized and imported separately as taxonomy terms.
 
+This plugin was developed by Moove Agency.
+
+== Screenshots ==
+1. Select / Upload the XML/RSS feed.
+2. Select the repeat element from feed
+3. Matching elements
+4. Import finished
+
 == Installation ==
 1. Upload the plugin files to the plugins directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the \'Plugins\' screen in WordPress
 3. Use the Settings->Moove feed importer screen to configure the plugin
 
 == Changelog ==
+
+= 1.0.5. =
+* Fixed Options page controller issue
 
 = 1.0.4. =
 * Rss "Atom" namespase issue fixed

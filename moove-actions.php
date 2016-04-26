@@ -109,7 +109,7 @@ class Moove_Importer_Actions {
 	public function moove_create_post() {
 		$args = array(
 			'key'			=> sanitize_text_field( esc_sql( $_POST['key'] ) ),
-			'value'			=> esc_sql( wp_unslash( $_POST['value'] ) ),
+			'value'			=> wp_unslash( $_POST['value'] ),
 			'form_data'		=> esc_sql( wp_unslash( $_POST['form_data'] ) ),
 		);
 		$move_create_post = new Moove_Importer_Controller;

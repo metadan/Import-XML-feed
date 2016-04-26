@@ -19,8 +19,7 @@ class Moove_Importer_Options {
 	 * Construct
 	 */
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'moove_importer_admin_menu' ) );
-		add_action( 'admin_init', array( $this, 'moove_importer_page_init' ) );
+		add_action( 'admin_menu', array( &$this, 'moove_importer_admin_menu' ) );
 	}
 
 	/**
