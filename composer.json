@@ -1,0 +1,14 @@
+{
+  "name": "metadan/import-xml-feed",
+  "type":"wordpress-plugin",
+  "description": "MooveAgency Import XML feed plugin updated to import post date also",
+  "minimum-stability": "stable",
+  "composer/installers": "v1.0.12",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Dan Crack",
+      "email": "dan@freethinkingdesign.co.uk"
+    }
+  ]
+}
