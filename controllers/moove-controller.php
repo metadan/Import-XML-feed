@@ -366,6 +366,12 @@ class Moove_Importer_Controller {
                             );
                         endif;
                     endforeach;
+                elseif ( $form_key === 'post_date' ) :
+                    $_key =  Moove_Importer_Controller::moove_recursive_array_search( $form_value , $xml_data_values['values'] );
+                    if ( is_array( $_key ) ) :
+                        $new_form_data[ $form_key ] = DateTime::createFromFormat("D, d M Y H:i:s O",$xml_data_values['values'][$_key[0]]['value'])->format('Y-m-d H:i:s');
+                    endif;
+
                 else :
                     $_key =  Moove_Importer_Controller::moove_recursive_array_search( $form_value , $xml_data_values['values'] );
                     if ( is_array( $_key ) ) :

@@ -139,6 +139,7 @@
                     post_type           :   $('#moove-importer-post-type-select option:selected').val(),
                     post_status         :   $('#moove-importer-post-type-status option:selected').val(),
                     post_title          :   $('#moove-importer-post-type-posttitle option:selected').val(),
+                    post_date           :   $('#moove-importer-post-type-postdate option:selected').val(),
                     post_content        :   $('#moove-importer-post-type-postcontent option:selected').val(),
                     post_excerpt        :   $('#moove-importer-post-type-postexcerpt option:selected').val(),
                     post_featured_image :   $('#moove-importer-post-type-ftrimage option:selected').val(),

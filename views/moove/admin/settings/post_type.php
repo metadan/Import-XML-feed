@@ -49,6 +49,11 @@
                 <select name="moove-importer-post-type-postcontent" id="moove-importer-post-type-postcontent" class="moove-importer-dynamic-select" required>
                 </select>
 
+                <h4><?php _e( 'Post date' , 'moove' ); ?></h4>
+                <select name="moove-importer-post-type-postdate" id="moove-importer-post-type-postdate" class="moove-importer-dynamic-select" required>
+                </select>
+
+
                 <h4><?php _e( 'Post excerpt' , 'moove' ); ?></h4>
                 <select name="moove-importer-post-type-postexcerpt" id="moove-importer-post-type-postexcerpt" class="moove-importer-dynamic-select" required>
                 </select>
