@@ -410,7 +410,7 @@ class Moove_Importer_Controller {
                 );
             endif;
         endforeach;
-        Moove_Importer_Controller::moove_set_featured_image( $post_id, $new_form_data[ 'post_featured_image' ] );
+//        Moove_Importer_Controller::moove_set_featured_image( $post_id, $new_form_data[ 'post_featured_image' ] );
         return ( $post_id ) ? true : false;
     }
 }
